@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import image from '../assets/image.png'
 import google from '../assets/google.png'
-
+import axios from 'axios'
+  import { ToastContainer, toast } from 'react-toastify';
 const Login = () => {
   const navigate = useNavigate()
   const [form, setForm] = useState({ email: '', password: '' })
@@ -14,30 +15,36 @@ const Login = () => {
   const set = (field) => (e) => setForm({ ...form, [field]: e.target.value })
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    try {
-      const response = await fetch('https://expenses-tracker-backend-86b9.onrender.com/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: form.email,
-          password: form.password,
-        }),
-      })
-      const data = await response.json()
-      if (response.ok) {
-        console.log('Login success:', data)
-        navigate('/otp') 
-      } else {
-        console.log('Login error:', data.message)
-      }
-    } catch (error) {
-      console.error('Network error:', error)
-    } finally {
-      setLoading(false)
+  e.preventDefault();
+  setLoading(true);
+
+  try {
+      console.log("sending req1")
+    const response = await axios.post(
+      "https://expenses-tracker-backend-ki3x.onrender.com/api/login",
+      {
+        email: form.email,
+        password: form.password,
+      },
+        { withCredentials: true }
+    );
+      console.log("sending req2")
+
+
+
+    if (response.status === 200) {
+      console.log("Login successfully");
+      toast("Login Successful", { type: "success", autoClose: 1000 });
+      setTimeout(() => navigate("/dashboard"), 1500);
     }
+  } catch (error) {
+    toast(error?.response?.data?.message || "Login failed. Please try again.", { type: "error", autoClose: 1000 });
+  } finally {
+      console.log("sending req3")
+
+    setLoading(false);
   }
+};
 
   const inputStyle = (name, extra = {}) => ({
     width: '100%',

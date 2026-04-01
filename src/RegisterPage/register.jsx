@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import image from '../assets/image.png'
 import google from '../assets/google.png'
 import axios from 'axios'
-import { useToast } from "../components/ui/use-toast";
 
+  import { ToastContainer, toast } from 'react-toastify';
 
 
 const Register = () => {
   const navigate = useNavigate()
-  const { toast } = useToast();
+
 
   const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' })
   const [show, setShow] = useState({ password: false, confirm: false })
@@ -24,7 +24,8 @@ const Register = () => {
     if (!agree) return
     try {
   setLoading(true)
-  const data= await axios.post('https://expenses-tracker-backend-86b9.onrender.com/api/register', {
+
+  const data= await axios.post(' https://expenses-tracker-backend-ki3x.onrender.com/api/register', {
     userName: form.name,
     email: form.email,
     password: form.password,
@@ -32,21 +33,19 @@ const Register = () => {
 {  withCredentials: true}
 )
   console.log('Registration success:', data)
-  toast({
-    title: "Registration Successful",
-    description: "You have been registered successfully.",
-    variant: "default",
-  });
+ toast("Registration Sucessfull", { type: "success",autoClose: 1000 });
+    setTimeout(() => {
+    navigate('/otp', { state: { email: form.email } })
+}, 1000);
+
 
 } catch (error) {
  if (error.response) {
     // Backend responded with an error
-    console.error("Registration error:", error.response.data);
-      toast({
-    title: "Error in Registration",
-    description: error.response.data.message || "An error occurred during registration.",
-    variant: "default",
-  });
+    console.log(error.response.data.errors[0].message)
+    console.error("Registration error:", error.response.data.message);
+      toast(error.response.data.errors[0].message|| "Registration failed. Please try again.", { type: "error" });
+      toast(error.response.data.errors[1].message|| "Registration failed. Please try again.", { type: "error" });
   } else if (error.request) {
     // Request was made but no response
     console.error("No response received:", error.request);
@@ -60,9 +59,7 @@ finally{
   setLoading(false)
 }
 
-  setTimeout(() => {
-    navigate('/otp', { state: { email: form.email } })
-}, 1500);
+
 
   }
 

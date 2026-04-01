@@ -65,7 +65,7 @@ const OtpVerification = () => {
     setError("");
     try {
       const data = await axios.post(
-        "https://expenses-tracker-backend-86b9.onrender.com/api/verify-otp",
+        " https://expenses-tracker-backend-ki3x.onrender.com/api/verify-otp",
         {
           email: email,
           otp: code,
@@ -74,13 +74,14 @@ const OtpVerification = () => {
 
       console.log("OTP verification success:", data);
       setSuccess(true);
+      setTimeout(() => navigate("/Login"), 1500);
     } catch (error) {
-      setError("Network error. Please try again.");
+      console.log("Error:", error.response?.data.message || error.message);
+      setError(error.response?.data.message || "Verification failed. Please try again.");
       triggerShake();
     } finally {
       setLoading(false);
     }
-    setTimeout(() => navigate("/dashboard"), 1500);
   };
 
   const triggerShake = () => {
@@ -298,7 +299,7 @@ const OtpVerification = () => {
                 Verified!
               </h2>
               <p style={{ margin: 0, color: "#888", fontSize: 14 }}>
-                Redirecting you to your dashboard…
+                Redirecting you to Login
               </p>
             </div>
           ) : (
@@ -474,16 +475,7 @@ const OtpVerification = () => {
                   marginBottom: 0,
                 }}
               >
-                <span
-                  onClick={() => navigate("/login")}
-                  style={{
-                    color: "#2d6a3f",
-                    fontWeight: 700,
-                    cursor: "pointer",
-                  }}
-                >
-                  ← Back to Login
-                </span>
+
               </p>
             </>
           )}
