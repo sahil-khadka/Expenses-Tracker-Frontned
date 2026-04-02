@@ -23,6 +23,8 @@ const Register = () => {
     e.preventDefault()
     if (!agree) return
     try {
+  
+
   setLoading(true)
 
   const data= await axios.post(' https://expenses-tracker-backend-ki3x.onrender.com/api/register', {
@@ -40,9 +42,11 @@ const Register = () => {
 
 
 } catch (error) {
- if (error.response) {
+  console.log("err",error.response.data.message)
+   toast(error.response.data.message || "Registration failed. Please try again.", { type: "error" })
+  if (error.response) {
     // Backend responded with an error
-    console.log(error.response.data.errors[0].message)
+    console.log("erxxr",error.response.data.errors[0].message)
     console.error("Registration error:", error.response.data.message);
       toast(error.response.data.errors[0].message|| "Registration failed. Please try again.", { type: "error" });
       toast(error.response.data.errors[1].message|| "Registration failed. Please try again.", { type: "error" });
@@ -62,6 +66,30 @@ finally{
 
 
   }
+
+  const handleGoogleLogin = async () => {
+  try {
+    setLoading(true);
+
+    const response = await axios.get(
+      "https://expenses-tracker-backend-ki3x.onrender.com/api/loginwithgoogle",
+      { withCredentials: true }
+    );
+
+    console.log("Google login success:", response.data);
+    toast("Login Successful with Google", { type: "success", autoClose: 1000 });
+
+    setTimeout(() => {
+      navigate("/dashboard"); // or wherever you want to redirect after login
+    }, 1000);
+  } catch (error) {
+    console.error("Google login error:", error.response?.data || error.message);
+    toast(error.response?.data?.message || "Google login failed. Please try again.", { type: "error" });
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const inputStyle = (name, extra = {}) => ({
     width: '100%',
@@ -273,6 +301,7 @@ finally{
               }}
               onMouseEnter={e => e.currentTarget.style.background = '#f9fafb'}
               onMouseLeave={e => e.currentTarget.style.background = '#fff'}
+               onClick={handleGoogleLogin} 
             >
               <img src={google} alt="Google" style={{ width: 40, height: 20 }} />
               Google

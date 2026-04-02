@@ -201,14 +201,14 @@ const Login = () => {
             </button>
 
             {/* Divider */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            {/* <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <div style={{ flex: 1, height: 1, background: '#e5e7eb' }} />
               <span style={{ fontSize: 12, color: '#aaa', whiteSpace: 'nowrap' }}>Or continue with:</span>
               <div style={{ flex: 1, height: 1, background: '#e5e7eb' }} />
-            </div>
+            </div> */}
 
             {/* Google button */}
-            <button
+            {/* <button
               type="button"
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -222,7 +222,7 @@ const Login = () => {
             >
               <img src={google} alt="Google" style={{ width: 40, height: 20 }} />
               Google
-            </button>
+            </button> */}
 
           </form>
 
