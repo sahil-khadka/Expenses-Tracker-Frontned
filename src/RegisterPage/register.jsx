@@ -31,6 +31,7 @@ const Register = () => {
     userName: form.name,
     email: form.email,
     password: form.password,
+    conformpassword:form.confirm,
   },
 {  withCredentials: true}
 )
